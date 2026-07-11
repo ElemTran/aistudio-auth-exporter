@@ -14,7 +14,13 @@ function sha256(buffer) {
 }
 
 function runZip(archivePath) {
-    const result = spawnSync("zip", ["-qr", archivePath, "."], { cwd: packageDirectory, encoding: "utf8" });
+    const isWindows = process.platform === "win32";
+    const command = isWindows ? "powershell.exe" : "zip";
+    const args = isWindows
+        ? ["-NoLogo", "-NoProfile", "-NonInteractive", "-Command",
+            `Compress-Archive -Path . -DestinationPath '${archivePath}' -Force`]
+        : ["-qr", archivePath, "."];
+    const result = spawnSync(command, args, { cwd: packageDirectory, encoding: "utf8" });
     if (result.error || result.status !== 0) {
         throw new Error(`无法压缩 playwright-core：${result.error?.message || result.stderr || "zip 返回非零状态"}`);
     }
