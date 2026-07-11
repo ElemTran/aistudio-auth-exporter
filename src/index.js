@@ -50,7 +50,13 @@ async function main() {
         const page = await context.newPage();
         console.log("请在打开的 Camoufox 中完成 Google AI Studio 登录。登录成功后将自动导出认证文件。");
         await page.goto(AI_STUDIO_URL);
-        await page.waitForFunction(() => document.title.includes("AI Studio"), undefined, { timeout: 900000 });
+        // ponytail: 轮询代替 waitForFunction，pkg 打包后函数序列化会失败
+        const deadline = Date.now() + 900000;
+        while (Date.now() < deadline) {
+            const title = await page.title();
+            if (title.includes("AI Studio")) break;
+            await page.waitForTimeout(1000);
+        }
         await page.waitForTimeout(2000);
         const authPath = saveAuthState(outputDirectory, await context.storageState(), await getAccountName(page));
         console.log(`认证文件已保存：${authPath}`);
