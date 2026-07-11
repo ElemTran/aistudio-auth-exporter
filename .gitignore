@@ -1,0 +1,6 @@
+node_modules/
+dist/
+auth/
+assets/camoufox-*.zip
+assets/playwright-core-*.zip
+src/generated/

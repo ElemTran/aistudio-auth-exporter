@@ -1,0 +1,26 @@
+{
+  "name": "aistudio-auth-exporter",
+  "version": "0.1.0",
+  "private": true,
+  "description": "离线内嵌 Camoufox 的 Windows AI Studio 认证导出器",
+  "type": "module",
+  "bin": "src/index.js",
+  "pkg": {
+    "assets": [
+      "assets/*.zip"
+    ]
+  },
+  "scripts": {
+    "build": "node scripts/build-release.mjs",
+    "embed:camoufox": "node scripts/embed-camoufox.mjs",
+    "embed:playwright-core": "node scripts/embed-playwright-core.mjs",
+    "start": "node src/index.js",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "@yao-pkg/pkg": "6.21.0"
+  },
+  "dependencies": {
+    "playwright-core": "1.59.1"
+  }
+}
